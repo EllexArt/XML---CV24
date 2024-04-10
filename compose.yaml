@@ -17,6 +17,7 @@ services:
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
     volumes:
       - .m2:/root/.m2
+      - ./app:/app
     stdin_open: true
     tty: true
 
