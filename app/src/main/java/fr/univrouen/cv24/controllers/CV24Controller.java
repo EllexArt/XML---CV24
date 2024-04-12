@@ -17,6 +17,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -34,9 +35,10 @@ class CV24Controller {
     @GetMapping("/")
     @Operation(summary = "Homepage of the application")
     @ResponseStatus(HttpStatus.OK)
-    public String index() {
-        return "Hello la team, Gilbertonin" +
-                " best bébou !!";
+    public ModelAndView index() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("index");
+        return modelAndView;
     }
 
     @PostMapping(value = "/cv24/insert",
