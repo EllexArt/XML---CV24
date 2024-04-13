@@ -16,7 +16,6 @@ public class ErrorResponse extends Response {
 
     public ErrorResponse(String message) {
         super(ResponseStatus.ERROR);
-    public ErrorResponse(String message, ResponseStatus status) {
         this.message = message;
     }
 

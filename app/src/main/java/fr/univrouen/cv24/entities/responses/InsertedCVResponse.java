@@ -9,7 +9,7 @@ public class InsertedCVResponse extends Response {
     @XmlElement
     private int cvId;
 
-    public InsertedCVResponse(int cvId, ResponseStatus status) {
+    public InsertedCVResponse(int cvId) {
         super(ResponseStatus.INSERTED);
         this.cvId = cvId;
     }

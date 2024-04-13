@@ -100,25 +100,25 @@ class CV24Controller {
             document = cv24Service.getXMLCVDocumentFromInputStream(new ByteArrayInputStream(cv.getBytes()));
             if (!cv24Service.isValidCV(document)) {
                 return new ResponseEntity<>(
-                        new ErrorResponse("The xml is not a valid CV", ResponseStatus.ERROR),
+                        new ErrorResponse("The xml is not a valid CV"),
                         HttpStatus.NOT_ACCEPTABLE
                 );
             }
         } catch (InvalidResourceException e) {
             return new ResponseEntity<>(
-                    new ErrorResponse(e.getMessage(), ResponseStatus.ERROR),
+                    new ErrorResponse(e.getMessage()),
                     HttpStatus.INTERNAL_SERVER_ERROR
             );
         } catch (InvalidXMLException e) {
             return new ResponseEntity<>(
-                    new ErrorResponse("The xml is not a valid CV", ResponseStatus.ERROR),
+                    new ErrorResponse("The xml is not a valid CV"),
                     HttpStatus.NOT_ACCEPTABLE
             );
         }
 
         if (cv24Service.isAlreadyInDatabase(document)) {
             return new ResponseEntity<>(
-                    new ErrorResponse("Already in database", ResponseStatus.DUPLICATED),
+                    new ErrorResponse("Already in database"),
                     HttpStatus.NOT_ACCEPTABLE
             );
         }
