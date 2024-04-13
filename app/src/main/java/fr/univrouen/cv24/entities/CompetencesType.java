@@ -11,10 +11,7 @@ package fr.univrouen.cv24.entities;
 import java.util.ArrayList;
 import java.util.List;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import jakarta.xml.bind.annotation.*;
 
 
@@ -52,10 +49,10 @@ public class CompetencesType {
     private Long id;
 
     @XmlElement(required = true)
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     protected List<DiplomeType> diplome;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     protected List<CertifType> certif;
 
     /**

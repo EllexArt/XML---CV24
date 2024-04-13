@@ -6,5 +6,5 @@ mvn spring-boot:run -Dspring-boot.run.jvmArguments="-agentlib:jdwp=transport=dt_
 
 while true
 do
-  watch -d -t -g "ls -lR . | sha1sum" && mvn compile
+    watch -d -t -g "ls -lR . | sha1sum" && mvn compile
 done

@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <xsl:stylesheet version="1.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:cv24="http://univ.fr/cv24">
@@ -84,7 +84,7 @@
         </xsl:element>
         <xsl:element name="table">
             <xsl:element name="tbody">
-                <xsl:for-each select="cv24:competences/cv24:diplôme">
+                <xsl:for-each select="cv24:competences/cv24:diplome">
                     <xsl:element name="tr">
                         <xsl:element name="th">
                             <xsl:call-template name="formatDate">

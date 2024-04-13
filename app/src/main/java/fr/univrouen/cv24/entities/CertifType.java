@@ -63,14 +63,20 @@ public class CertifType {
     protected String titre;
 
     @Column(name = "datedeb")
+    @Access(AccessType.PROPERTY)
     public Date getDateSQLdeb() {
         return new Date(datedeb.toGregorianCalendar().getTimeInMillis());
     }
 
     @Column(name = "datefin")
+    @Access(AccessType.PROPERTY)
     public Date getDateSQLfin() {
         return new Date(datefin.toGregorianCalendar().getTimeInMillis());
     }
+
+    public void setDateSQLdeb(Date value) {}
+
+    public void setDateSQLfin(Date value) {}
 
     /**
      * Gets the value of the datedeb property.

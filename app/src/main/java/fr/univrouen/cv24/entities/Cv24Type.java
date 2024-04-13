@@ -49,21 +49,21 @@ public class Cv24Type {
     private Long id;
 
     @XmlElement(required = true)
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     protected IdentiteType identite;
 
     @XmlElement(required = true)
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     protected ObjectifType objectif;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     protected ProfType prof;
 
     @XmlElement(required = true)
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     protected CompetencesType competences;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     protected DiversType divers;
 
     /**

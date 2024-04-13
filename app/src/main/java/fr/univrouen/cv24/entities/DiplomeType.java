@@ -65,10 +65,12 @@ public class DiplomeType {
     protected int niveau;
 
     @Column(name = "date")
+    @Access(AccessType.PROPERTY)
     public Date getDateSQL() {
         return new Date(date.toGregorianCalendar().getTimeInMillis());
     }
 
+    public void setDateSQL(Date date) {}
     /**
      * Gets the value of the date property.
      *
