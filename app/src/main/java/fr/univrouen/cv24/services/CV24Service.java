@@ -1,9 +1,12 @@
 package fr.univrouen.cv24.services;
 
-import fr.univrouen.cv24.entities.CV;
+import fr.univrouen.cv24.entities.Cv24Type;
+import fr.univrouen.cv24.entities.GenreType;
+import fr.univrouen.cv24.entities.IdentiteType;
 import fr.univrouen.cv24.exceptions.InvalidResourceException;
 import fr.univrouen.cv24.exceptions.InvalidXMLException;
 import fr.univrouen.cv24.repositories.CVRepository;
+import fr.univrouen.cv24.repositories.IdentityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.xml.SimpleNamespaceContext;
@@ -26,7 +29,6 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -34,6 +36,9 @@ import java.util.Optional;
 
 @Service
 public class CV24Service {
+
+    @Autowired
+    private IdentityRepository identityRepository;
 
     @Autowired
     private CVRepository cvRepository;
@@ -117,17 +122,19 @@ public class CV24Service {
         System.out.println("test");
         System.out.println(cv.getDocumentElement().getChildNodes().toString());
 
-        Optional<CV> duplicatedCV =
-                cvRepository.findByNameAndFirstNameAndGenderAndPhone(name, firstName, gender, phone);
+        Optional<IdentiteType> duplicatedIdentity =
+                identityRepository.findByNomAndPrenomAndGenreAndTel(
+                        name, firstName, GenreType.fromValue(gender), phone
+                );
 
-        return duplicatedCV.isPresent();
+        return duplicatedIdentity.isPresent();
     }
 
     /**
      * saveCV: save the cv in the database
      * @param cv the cv to save
      */
-    public void saveCV(CV cv) {
+    public void saveCV(Cv24Type cv) {
         cvRepository.save(cv);
     }
 
