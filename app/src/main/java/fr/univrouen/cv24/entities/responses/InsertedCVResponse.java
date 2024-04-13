@@ -10,7 +10,7 @@ public class InsertedCVResponse extends Response {
     private int cvId;
 
     public InsertedCVResponse(int cvId, ResponseStatus status) {
-        super(status);
+        super(ResponseStatus.INSERTED);
         this.cvId = cvId;
     }
 

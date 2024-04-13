@@ -1,11 +1,7 @@
 package fr.univrouen.cv24.entities;
 
-import fr.univrouen.cv24.entities.miscellaneous.Miscellaneous;
-import fr.univrouen.cv24.entities.skills.Skills;
-import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
-
-import java.util.List;
+import org.hibernate.annotations.ColumnTransformer;
 
 @Entity
 @Table(name = "cv")
@@ -15,7 +11,8 @@ public class CV {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @Lob
+    @Column(columnDefinition = "xml")
+    @ColumnTransformer(write = "? :: xml")
     private String content;
 
     public long getId() {
@@ -32,6 +29,10 @@ public class CV {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public long getId() {
+        return id;
     }
 
 //    @OneToOne
