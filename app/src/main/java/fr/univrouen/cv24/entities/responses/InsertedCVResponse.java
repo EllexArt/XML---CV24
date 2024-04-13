@@ -12,17 +12,13 @@ public class InsertedCVResponse implements Response {
     @XmlElement
     private ResponseStatus status;
 
-    public InsertedCVResponse(int cvId, ResponseStatus status) {
+    public InsertedCVResponse(int cvId) {
         this.cvId = cvId;
-        this.status = status;
+        this.status = ResponseStatus.INSERTED;
     }
 
     public ResponseStatus getStatus() {
         return status;
-    }
-
-    public void setStatus(ResponseStatus status) {
-        this.status = status;
     }
 
     public int getCvId() {

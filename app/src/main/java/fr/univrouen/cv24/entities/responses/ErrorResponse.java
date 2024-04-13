@@ -15,9 +15,9 @@ public class ErrorResponse implements Response {
     @XmlElement
     private final ResponseStatus status;
 
-    public ErrorResponse(String message) {
+    public ErrorResponse(String message, ResponseStatus status) {
         this.message = message;
-        status = ResponseStatus.ERROR;
+        this.status = status;
     }
 
     public String getMessage() {
