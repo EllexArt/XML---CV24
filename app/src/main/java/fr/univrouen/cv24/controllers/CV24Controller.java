@@ -4,6 +4,7 @@ import fr.univrouen.cv24.entities.Cv24Type;
 import fr.univrouen.cv24.entities.responses.ErrorResponse;
 import fr.univrouen.cv24.entities.responses.InsertedCVResponse;
 import fr.univrouen.cv24.entities.responses.Response;
+import fr.univrouen.cv24.entities.responses.XMLResponse;
 import fr.univrouen.cv24.exceptions.InvalidResourceException;
 import fr.univrouen.cv24.exceptions.InvalidXMLException;
 import fr.univrouen.cv24.repositories.CVRepository;
@@ -17,15 +18,11 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.w3c.dom.Document;
-import fr.univrouen.cv24.entities.responses.ResponseStatus;
 
 import javax.xml.transform.dom.DOMSource;
 import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.IOException;
 import java.util.Optional;
 
 @RestController
@@ -36,7 +33,6 @@ class CV24Controller {
     @Autowired
     private Jaxb2Marshaller marshaller;
 
-    public CV24Controller(final CV24Service cv24Service) {
     private final CVRepository cvRepository;
 
     public CV24Controller(final CV24Service cv24Service, final CVRepository cvRepository) {
@@ -61,10 +57,10 @@ class CV24Controller {
             @ApiResponse(responseCode = "406", description = "Invalid id, no CV found")
     })
     public ResponseEntity<Response> findXMLCVById(@RequestParam long id) {
-        Optional<CV> optional = cvRepository.findById(id);
+        Optional<Cv24Type> optional = cvRepository.findById(id);
 
         return optional.<ResponseEntity<Response>>map(cv -> new ResponseEntity<>(
-                new XMLResponse(cv, fr.univrouen.cv24.entities.responses.ResponseStatus.FOUND),
+                new XMLResponse(optional.get(), fr.univrouen.cv24.entities.responses.ResponseStatus.FOUND),
                 HttpStatus.OK
             )
         ).orElseGet(() -> new ResponseEntity<>(
@@ -74,23 +70,24 @@ class CV24Controller {
         );
     }
 
-    @GetMapping("/cv24/html")
+    @GetMapping(value ="/cv24/html",
+            produces = MediaType.TEXT_HTML_VALUE)
     @Operation(summary = "Display an XML CV by its id", responses = {
             @ApiResponse(responseCode = "200", description = "Found CV"),
             @ApiResponse(responseCode = "406", description = "Invalid id, no CV found")
     })
-    public ResponseEntity<Response> findHTMLCVById(@RequestParam long id) {
-        Optional<CV> optional = cvRepository.findById(id);
+    public ResponseEntity<String> findHTMLCVById(@RequestParam long id) {
+        Optional<Cv24Type> optional = cvRepository.findById(id);
 
-        return optional.<ResponseEntity<Response>>map(cv -> {
-                String content = cv24Service.createHTML(cv);
-                return new ResponseEntity<>(
-                        new HTMLResponse(fr.univrouen.cv24.entities.responses.ResponseStatus.FOUND, content),
-                        HttpStatus.OK
+        return optional.<ResponseEntity<String>>map(cv -> {
+                String content = cv24Service.createHTML(optional.get());
+                    return new ResponseEntity<>(
+                            content,
+                    HttpStatus.OK
                 );
         }
-        ).orElseGet(() -> new ResponseEntity<>(
-                        new ErrorResponse("Incorrect id, no CV are registered with it"),
+        ).orElseGet(() -> new ResponseEntity<String>(
+                        "<p>Incorrect id, no CV are registered with it</p>",
                         HttpStatus.BAD_REQUEST
                 )
         );

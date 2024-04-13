@@ -62,12 +62,12 @@ public class CertifType {
     @XmlElement(required = true)
     protected String titre;
 
-    @Column(name = "date-deb")
+    @Column(name = "datedeb")
     public Date getDateSQLdeb() {
         return new Date(datedeb.toGregorianCalendar().getTimeInMillis());
     }
 
-    @Column(name = "date-fin")
+    @Column(name = "datefin")
     public Date getDateSQLfin() {
         return new Date(datefin.toGregorianCalendar().getTimeInMillis());
     }

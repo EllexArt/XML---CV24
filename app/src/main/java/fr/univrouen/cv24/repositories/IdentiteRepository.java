@@ -6,7 +6,7 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;
 
-public interface IdentityRepository extends CrudRepository<IdentiteType, Long>  {
+public interface IdentiteRepository extends CrudRepository<IdentiteType, Long>  {
 
     Optional<IdentiteType> findByNomAndPrenomAndGenreAndTel(
             final String nom,

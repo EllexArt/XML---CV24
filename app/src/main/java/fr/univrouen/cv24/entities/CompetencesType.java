@@ -40,7 +40,7 @@ import jakarta.xml.bind.annotation.*;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "competencesType", propOrder = {
-    "dipl\u00f4me",
+    "diplome",
     "certif"
 })
 @Entity
@@ -53,7 +53,7 @@ public class CompetencesType {
 
     @XmlElement(required = true)
     @OneToMany
-    protected List<DiplomeType> diplôme;
+    protected List<DiplomeType> diplome;
 
     @OneToMany
     protected List<CertifType> certif;
@@ -80,11 +80,11 @@ public class CompetencesType {
      * 
      * 
      */
-    public List<DiplomeType> getDiplôme() {
-        if (diplôme == null) {
-            diplôme = new ArrayList<DiplomeType>();
+    public List<DiplomeType> getDiplome() {
+        if (diplome == null) {
+            diplome = new ArrayList<DiplomeType>();
         }
-        return this.diplôme;
+        return this.diplome;
     }
 
     /**

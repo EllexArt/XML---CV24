@@ -6,7 +6,7 @@ import fr.univrouen.cv24.entities.IdentiteType;
 import fr.univrouen.cv24.exceptions.InvalidResourceException;
 import fr.univrouen.cv24.exceptions.InvalidXMLException;
 import fr.univrouen.cv24.repositories.CVRepository;
-import fr.univrouen.cv24.repositories.IdentityRepository;
+import fr.univrouen.cv24.repositories.IdentiteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.xml.SimpleNamespaceContext;
@@ -38,7 +38,7 @@ import java.util.Optional;
 public class CV24Service {
 
     @Autowired
-    private IdentityRepository identityRepository;
+    private IdentiteRepository identityRepository;
 
     @Autowired
     private CVRepository cvRepository;
@@ -141,12 +141,12 @@ public class CV24Service {
     /**
      * createHTML:  transform XML data
      */
-    public String createHTML(CV cv) {
+    public String createHTML(Cv24Type cv) {
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         Transformer transformer;
         Source xslt = new StreamSource("src/main/resources/templates/cv.xslt");
         assert !xslt.isEmpty();
-        Source xml = new StreamSource(new StringReader(cv.getContent()));
+        Source xml = new StreamSource(new StringReader(cv.toString()));
         assert !xml.isEmpty();
         try {
             transformer = transformerFactory.newTransformer(xslt);
