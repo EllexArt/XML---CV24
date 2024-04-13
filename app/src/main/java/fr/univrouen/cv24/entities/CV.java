@@ -31,10 +31,6 @@ public class CV {
         this.content = content;
     }
 
-    public long getId() {
-        return id;
-    }
-
 //    @OneToOne
 //    private Identity identity;
 //
