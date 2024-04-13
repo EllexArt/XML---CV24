@@ -7,17 +7,16 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "error")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class ErrorResponse implements Response {
+public class ErrorResponse extends Response {
 
     @XmlElement
     private String message;
 
-    @XmlElement
-    private final ResponseStatus status;
+
 
     public ErrorResponse(String message) {
+        super(ResponseStatus.ERROR);
         this.message = message;
-        status = ResponseStatus.ERROR;
     }
 
     public String getMessage() {
@@ -26,9 +25,5 @@ public class ErrorResponse implements Response {
 
     public void setMessage(String message) {
         this.message = message;
-    }
-
-    public ResponseStatus getStatus() {
-        return status;
     }
 }

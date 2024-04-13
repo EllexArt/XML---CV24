@@ -1,5 +1,6 @@
 package fr.univrouen.cv24.services;
 
+import fr.univrouen.cv24.entities.CV;
 import fr.univrouen.cv24.exceptions.InvalidResourceException;
 import fr.univrouen.cv24.exceptions.InvalidXMLException;
 import org.springframework.stereotype.Service;
@@ -10,13 +11,14 @@ import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.URL;
 
 @Service
@@ -52,6 +54,32 @@ public class CV24Service {
             throw new InvalidXMLException("Impossible to validate the xml");
         }
         return !simpleErrorHandler.errorOccurred;
+    }
+
+    /**
+     * createHTML:  transform XML data
+     */
+    public String createHTML(CV cv) {
+        TransformerFactory transformerFactory = TransformerFactory.newInstance();
+        Transformer transformer;
+        Source xslt = new StreamSource("src/main/resources/templates/cv.xslt");
+        assert !xslt.isEmpty();
+        Source xml = new StreamSource(new StringReader(cv.getContent()));
+        assert !xml.isEmpty();
+        try {
+            transformer = transformerFactory.newTransformer(xslt);
+        } catch (TransformerConfigurationException e) {
+            throw new RuntimeException(e);
+        }
+        transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+        transformer.setOutputProperty(OutputKeys.VERSION, "5");
+        StringWriter writer = new StringWriter();
+        try {
+            transformer.transform(xml, new StreamResult(writer));
+        } catch (TransformerException e) {
+            throw new RuntimeException(e);
+        }
+        return writer.getBuffer().toString();
     }
 
 }
