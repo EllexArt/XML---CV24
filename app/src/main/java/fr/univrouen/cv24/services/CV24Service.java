@@ -3,6 +3,8 @@ package fr.univrouen.cv24.services;
 import fr.univrouen.cv24.entities.Cv24Type;
 import fr.univrouen.cv24.entities.GenreType;
 import fr.univrouen.cv24.entities.IdentiteType;
+import fr.univrouen.cv24.entities.resume.CVList;
+import fr.univrouen.cv24.entities.resume.CVid;
 import fr.univrouen.cv24.exceptions.InvalidResourceException;
 import fr.univrouen.cv24.exceptions.InvalidXMLException;
 import fr.univrouen.cv24.repositories.CVRepository;
@@ -12,6 +14,8 @@ import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.stereotype.Service;
 import org.springframework.util.xml.SimpleNamespaceContext;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
 import javax.xml.XMLConstants;
@@ -33,6 +37,7 @@ import javax.xml.xpath.XPathFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -155,11 +160,65 @@ public class CV24Service {
      * createHTML:  transform XML data
      */
     public String createHTML(Cv24Type cv) {
+        return this.applySelectedXSLTOnCV(cv, "src/main/resources/templates/cv.xslt", "5");
+    }
+
+
+    /**
+     * createCVsResume: create a list of resume for all the cvs of the database
+     * @return the list of the resume of the cvs in XML format
+     */
+    public String createCVsResume() {
+        Iterable<Cv24Type> cvList = cvRepository.findAll();
+
+        DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder docBuilder = null;
+        try {
+            docBuilder = docFactory.newDocumentBuilder();
+        } catch (ParserConfigurationException e) {
+            throw new RuntimeException(e);
+        }
+        Document doc = docBuilder.newDocument();
+        Element root = doc.createElement("cvlist");
+        doc.appendChild(root);
+
+        for (Cv24Type cv : cvList) {
+            Element cvElement = doc.createElement("resume");
+            root.appendChild(cvElement);
+
+            Element idElement = doc.createElement("id");
+            idElement.setTextContent(String.valueOf(cv.getId()));
+            cvElement.appendChild(idElement);
+
+            String resumeValue = this.createResumeForCV(cv);
+            try {
+                Node node =  doc.importNode(docBuilder.parse(new ByteArrayInputStream(resumeValue.getBytes()))
+                        .getDocumentElement(), true);
+                cvElement.appendChild(node);
+            } catch (SAXException | IOException e) {
+                throw new RuntimeException(e);
+            }
+
+        }
+        try {
+            return this.transformDocumentInString(doc);
+        } catch (TransformerException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    /**
+     * createHTMLResume: create a HTML resume of all the CV of the database
+     * @return
+     */
+    public String createHTMLResume() {
+        String XMLResume = createCVsResume();
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         Transformer transformer;
-        Source xslt = new StreamSource("src/main/resources/templates/cv.xslt");
+        Source xslt = new StreamSource("src/main/resources/templates/htmlResume.xslt");
         assert !xslt.isEmpty();
-        Source xml = new StreamSource(new StringReader(transformCVToXML(cv)));
+        Source xml = new StreamSource(new StringReader(XMLResume));
         assert !xml.isEmpty();
         try {
             transformer = transformerFactory.newTransformer(xslt);
@@ -174,6 +233,61 @@ public class CV24Service {
         } catch (TransformerException e) {
             throw new RuntimeException(e);
         }
+        return writer.getBuffer().toString();
+    }
+
+    /**
+     * createResumeForCV: create a short resume of the cv
+     * @param cv the cv to resume
+     * @return string in XML format
+     */
+    private String createResumeForCV(Cv24Type cv) {
+        return this.applySelectedXSLTOnCV(cv, "src/main/resources/templates/resume.xslt", "1.0");
+    }
+
+
+    /**
+     * applySelectedXSLTOnCV: apply the selected xslt transformation on the selected cv
+     * @param cv the cv to transform
+     * @param xsltPath the xslt transformation to apply
+     * @return the transformed cv
+     */
+    private String applySelectedXSLTOnCV(Cv24Type cv, String xsltPath, String version) {
+        TransformerFactory transformerFactory = TransformerFactory.newInstance();
+        Transformer transformer;
+        Source xslt = new StreamSource(xsltPath);
+        assert !xslt.isEmpty();
+        Source xml = new StreamSource(new StringReader(transformCVToXML(cv)));
+        assert !xml.isEmpty();
+        try {
+            transformer = transformerFactory.newTransformer(xslt);
+        } catch (TransformerConfigurationException e) {
+            throw new RuntimeException(e);
+        }
+        transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+        transformer.setOutputProperty(OutputKeys.VERSION, version);
+        StringWriter writer = new StringWriter();
+        try {
+            transformer.transform(xml, new StreamResult(writer));
+        } catch (TransformerException e) {
+            throw new RuntimeException(e);
+        }
+        return writer.getBuffer().toString();
+    }
+
+    /**
+     * transformDocumentInString: transform the selected document into a string
+     * @param dom the dom to transform
+     * @return string representation of the document
+     * @throws TransformerException if a problem occur during the transformation
+     */
+    private String transformDocumentInString(Document dom)
+            throws TransformerException {
+        TransformerFactory tf = TransformerFactory.newInstance();
+        Transformer transformer = tf.newTransformer();
+        transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+        StringWriter writer = new StringWriter();
+        transformer.transform(new DOMSource(dom), new StreamResult(writer));
         return writer.getBuffer().toString();
     }
 

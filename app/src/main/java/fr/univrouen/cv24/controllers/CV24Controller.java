@@ -4,6 +4,7 @@ import fr.univrouen.cv24.entities.Cv24Type;
 import fr.univrouen.cv24.entities.responses.CVResponse;
 import fr.univrouen.cv24.entities.responses.CVResponseStatus;
 import fr.univrouen.cv24.entities.responses.Response;
+import fr.univrouen.cv24.entities.resume.CVList;
 import fr.univrouen.cv24.exceptions.CVAlreadyInDatabaseException;
 import fr.univrouen.cv24.exceptions.CVNotFoundException;
 import fr.univrouen.cv24.exceptions.InvalidResourceException;
@@ -49,6 +50,24 @@ class CV24Controller {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("index");
         return modelAndView;
+    }
+
+    @GetMapping(value = "/cv24/resume/xml",
+            produces = MediaType.APPLICATION_XML_VALUE)
+    @Operation(summary = "Return a resume of all the CV of the database in XML format", responses = {
+            @ApiResponse(responseCode = "200", description = "Resume of the CVs")
+    })
+    public String resumeXML() {
+        return cv24Service.createCVsResume();
+    }
+
+    @GetMapping(value = "/cv24/resume",
+            produces = MediaType.TEXT_HTML_VALUE)
+    @Operation(summary = "Return a resume of all the CV of the database in HTML format", responses = {
+            @ApiResponse(responseCode = "200", description = "Resume of the CVs")
+    })
+    public String resumeHTML() {
+        return cv24Service.createHTMLResume();
     }
 
     @GetMapping(value = "/cv24/xml",
