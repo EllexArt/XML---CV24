@@ -1,5 +1,6 @@
 package fr.univrouen.cv24.exceptions;
 
+import fr.univrouen.cv24.entities.responses.CVResponseStatus;
 import fr.univrouen.cv24.entities.responses.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +15,7 @@ public class CV24ControllerExceptionHandler {
     @ExceptionHandler(InvalidResourceException.class)
     public ResponseEntity<ErrorResponse> handleInvalidResourceException(Exception e) {
         return new ResponseEntity<>(
-                new ErrorResponse(e.getMessage(), fr.univrouen.cv24.entities.responses.ResponseStatus.ERROR),
+                new ErrorResponse(e.getMessage(), CVResponseStatus.ERROR),
                 HttpStatus.INTERNAL_SERVER_ERROR
         );
     }
@@ -23,7 +24,7 @@ public class CV24ControllerExceptionHandler {
     @ExceptionHandler(InvalidXMLException.class)
     public ResponseEntity<ErrorResponse> handleInvalidXMLException(Exception e) {
         return new ResponseEntity<>(
-                new ErrorResponse(e.getMessage(), fr.univrouen.cv24.entities.responses.ResponseStatus.ERROR),
+                new ErrorResponse(e.getMessage(), CVResponseStatus.ERROR),
                 HttpStatus.NOT_ACCEPTABLE
         );
     }
@@ -32,7 +33,7 @@ public class CV24ControllerExceptionHandler {
     @ExceptionHandler(CVAlreadyInDatabaseException.class)
     public ResponseEntity<ErrorResponse> handleCVAlreadyInDatabaseException(Exception e) {
         return new ResponseEntity<>(
-                new ErrorResponse(e.getMessage(), fr.univrouen.cv24.entities.responses.ResponseStatus.DUPLICATED),
+                new ErrorResponse(e.getMessage(), CVResponseStatus.DUPLICATED),
                 HttpStatus.CONFLICT
         );
     }
@@ -42,7 +43,7 @@ public class CV24ControllerExceptionHandler {
     public ResponseEntity<ErrorResponse> handleCVNotFoundException() {
         return new ResponseEntity<>(
                 new ErrorResponse("CV not found",
-                        fr.univrouen.cv24.entities.responses.ResponseStatus.NOT_FOUND),
+                        CVResponseStatus.NOT_FOUND),
                 HttpStatus.NOT_FOUND
         );
     }

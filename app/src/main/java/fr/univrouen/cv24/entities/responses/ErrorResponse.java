@@ -14,7 +14,7 @@ public class ErrorResponse extends Response {
 
 
 
-    public ErrorResponse(String message, ResponseStatus status) {
+    public ErrorResponse(String message, CVResponseStatus status) {
         super(status);
         this.message = message;
     }

@@ -1,7 +1,8 @@
 package fr.univrouen.cv24.controllers;
 
 import fr.univrouen.cv24.entities.Cv24Type;
-import fr.univrouen.cv24.entities.responses.InsertedCVResponse;
+import fr.univrouen.cv24.entities.responses.CVResponse;
+import fr.univrouen.cv24.entities.responses.CVResponseStatus;
 import fr.univrouen.cv24.entities.responses.Response;
 import fr.univrouen.cv24.exceptions.CVAlreadyInDatabaseException;
 import fr.univrouen.cv24.exceptions.CVNotFoundException;
@@ -97,7 +98,7 @@ class CV24Controller {
             @ApiResponse(responseCode = "409", description = "Duplicated identity"),
             @ApiResponse(responseCode = "500", description = "Internal error occurred")
     })
-    public ResponseEntity<Response> insertCV(@RequestBody String cv)
+    public ResponseEntity<CVResponse> insertCV(@RequestBody String cv)
             throws InvalidResourceException,
             InvalidXMLException,
             CVAlreadyInDatabaseException {
@@ -112,12 +113,31 @@ class CV24Controller {
 
         JAXBElement<Cv24Type> resultCV = (JAXBElement<Cv24Type>) marshaller.unmarshal(new DOMSource(document));
 
-        cv24Service.saveCV(resultCV.getValue());
+        Cv24Type cvInserted =  cv24Service.saveCV(resultCV.getValue());
 
         return new ResponseEntity<>(
-                new InsertedCVResponse(1),
+                new CVResponse(cvInserted.getId(), CVResponseStatus.INSERTED),
                 HttpStatus.OK
         );
+    }
+
+
+    @DeleteMapping(value = "/cv24/delete",
+        produces = MediaType.APPLICATION_XML_VALUE
+    )
+    @Operation(summary = "Delete a CV", responses = {
+            @ApiResponse(responseCode = "204", description = "CV deleted"),
+            @ApiResponse(responseCode = "404", description = "CV not found")
+    })
+    public ResponseEntity<CVResponse> deleteCV(@RequestBody long id) throws CVNotFoundException {
+        Optional<Cv24Type> optional = cvRepository.findById(id);
+
+        if (optional.isEmpty()) {
+            throw new CVNotFoundException();
+        }
+
+        cvRepository.delete(optional.get());
+        return new ResponseEntity<>(new CVResponse(id, CVResponseStatus.DELETED), HttpStatus.NO_CONTENT);
     }
 
 }

@@ -6,17 +6,17 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public abstract class Response {
     @XmlElement
-    private ResponseStatus status;
+    private CVResponseStatus status;
 
-    protected Response(ResponseStatus status) {
+    protected Response(CVResponseStatus status) {
         this.status = status;
     }
 
-    public ResponseStatus getStatus() {
+    public CVResponseStatus getStatus() {
         return status;
     }
 
-    public void setStatus(ResponseStatus status) {
+    public void setStatus(CVResponseStatus status) {
         this.status = status;
     }
 }

@@ -145,9 +145,10 @@ public class CV24Service {
     /**
      * saveCV: save the cv in the database
      * @param cv the cv to save
+     * @return the cv inserted
      */
-    public void saveCV(Cv24Type cv) {
-        cvRepository.save(cv);
+    public Cv24Type saveCV(Cv24Type cv) {
+        return cvRepository.save(cv);
     }
 
     /**

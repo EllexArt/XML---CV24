@@ -1,20 +1,19 @@
 package fr.univrouen.cv24.entities.responses;
 
 import jakarta.xml.bind.annotation.XmlElement;
-import jakarta.xml.bind.annotation.XmlRootElement;
 
 
-public class InsertedCVResponse extends Response {
+public class CVResponse extends Response {
 
     @XmlElement
-    private int cvId;
+    private long cvId;
 
-    public InsertedCVResponse(int cvId) {
-        super(ResponseStatus.INSERTED);
+    public CVResponse(long cvId, CVResponseStatus status) {
+        super(status);
         this.cvId = cvId;
     }
 
-    public int getCvId() {
+    public long getCvId() {
         return cvId;
     }
 

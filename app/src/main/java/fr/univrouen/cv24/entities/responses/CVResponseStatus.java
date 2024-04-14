@@ -1,8 +1,8 @@
 package fr.univrouen.cv24.entities.responses;
 
-public enum ResponseStatus {
+public enum CVResponseStatus {
     INSERTED,
     ERROR,
     DUPLICATED,
-    NOT_FOUND, FOUND
+    NOT_FOUND, DELETED, FOUND
 }
