@@ -1,10 +1,10 @@
 package fr.univrouen.cv24.controllers;
 
 import fr.univrouen.cv24.entities.Cv24Type;
-import fr.univrouen.cv24.entities.responses.ErrorResponse;
 import fr.univrouen.cv24.entities.responses.InsertedCVResponse;
 import fr.univrouen.cv24.entities.responses.Response;
-import fr.univrouen.cv24.entities.responses.XMLResponse;
+import fr.univrouen.cv24.exceptions.CVAlreadyInDatabaseException;
+import fr.univrouen.cv24.exceptions.CVNotFoundException;
 import fr.univrouen.cv24.exceptions.InvalidResourceException;
 import fr.univrouen.cv24.exceptions.InvalidXMLException;
 import fr.univrouen.cv24.repositories.CVRepository;
@@ -54,43 +54,38 @@ class CV24Controller {
         produces = MediaType.APPLICATION_XML_VALUE)
     @Operation(summary = "Display an XML CV by its id", responses = {
             @ApiResponse(responseCode = "200", description = "Found CV"),
-            @ApiResponse(responseCode = "406", description = "Invalid id, no CV found")
+            @ApiResponse(responseCode = "404", description = "Invalid id, no CV found")
     })
-    public ResponseEntity<Response> findXMLCVById(@RequestParam long id) {
+    public ResponseEntity<String> findXMLCVById(@RequestParam long id)
+            throws CVNotFoundException {
         Optional<Cv24Type> optional = cvRepository.findById(id);
 
-        return optional.<ResponseEntity<Response>>map(cv -> new ResponseEntity<>(
-                new XMLResponse(optional.get(), fr.univrouen.cv24.entities.responses.ResponseStatus.FOUND),
-                HttpStatus.OK
-            )
-        ).orElseGet(() -> new ResponseEntity<>(
-                new ErrorResponse("Incorrect id, no CV are registered with it"),
-                HttpStatus.NOT_ACCEPTABLE
-            )
-        );
+        if (optional.isEmpty()) {
+            throw new CVNotFoundException();
+        }
+
+        Cv24Type cv = optional.get();
+        String xml = cv24Service.transformCVToXML(cv);
+
+        return new ResponseEntity<>(xml, HttpStatus.OK);
     }
 
     @GetMapping(value ="/cv24/html",
             produces = MediaType.TEXT_HTML_VALUE)
     @Operation(summary = "Display an XML CV by its id", responses = {
             @ApiResponse(responseCode = "200", description = "Found CV"),
-            @ApiResponse(responseCode = "406", description = "Invalid id, no CV found")
+            @ApiResponse(responseCode = "404", description = "Invalid id, no CV found")
     })
     public ResponseEntity<String> findHTMLCVById(@RequestParam long id) {
         Optional<Cv24Type> optional = cvRepository.findById(id);
 
-        return optional.<ResponseEntity<String>>map(cv -> {
-                String content = cv24Service.createHTML(optional.get());
-                    return new ResponseEntity<>(
-                            content,
-                    HttpStatus.OK
-                );
+        if (optional.isEmpty()) {
+            return new ResponseEntity<>("CV not found", HttpStatus.NOT_FOUND);
         }
-        ).orElseGet(() -> new ResponseEntity<String>(
-                        "<p>Incorrect id, no CV are registered with it</p>",
-                        HttpStatus.BAD_REQUEST
-                )
-        );
+
+        Cv24Type cv = optional.get();
+
+        return new ResponseEntity<>(cv24Service.createHTML(cv), HttpStatus.OK);
     }
 
     @PostMapping(value = "/cv24/insert",
@@ -99,35 +94,20 @@ class CV24Controller {
     @Operation(summary = "Insert a CV", responses = {
             @ApiResponse(responseCode = "200", description = "CV inserted"),
             @ApiResponse(responseCode = "406", description = "Invalid xml format"),
+            @ApiResponse(responseCode = "409", description = "Duplicated identity"),
             @ApiResponse(responseCode = "500", description = "Internal error occurred")
     })
-    public ResponseEntity<Response> insertCV(@RequestBody String cv) {
-        Document document;
-        try {
-            document = cv24Service.getXMLCVDocumentFromInputStream(new ByteArrayInputStream(cv.getBytes()));
-            if (!cv24Service.isValidCV(document)) {
-                return new ResponseEntity<>(
-                        new ErrorResponse("The xml is not a valid CV"),
-                        HttpStatus.NOT_ACCEPTABLE
-                );
-            }
-        } catch (InvalidResourceException e) {
-            return new ResponseEntity<>(
-                    new ErrorResponse(e.getMessage()),
-                    HttpStatus.INTERNAL_SERVER_ERROR
-            );
-        } catch (InvalidXMLException e) {
-            return new ResponseEntity<>(
-                    new ErrorResponse("The xml is not a valid CV"),
-                    HttpStatus.NOT_ACCEPTABLE
-            );
+    public ResponseEntity<Response> insertCV(@RequestBody String cv)
+            throws InvalidResourceException,
+            InvalidXMLException,
+            CVAlreadyInDatabaseException {
+        Document document = cv24Service.getXMLCVDocumentFromInputStream(new ByteArrayInputStream(cv.getBytes()));
+        if (!cv24Service.isValidCV(document)) {
+            throw new InvalidXMLException("Invalid XML format");
         }
 
         if (cv24Service.isAlreadyInDatabase(document)) {
-            return new ResponseEntity<>(
-                    new ErrorResponse("Already in database"),
-                    HttpStatus.NOT_ACCEPTABLE
-            );
+            throw new CVAlreadyInDatabaseException("There is already a CV with the same identity");
         }
 
         JAXBElement<Cv24Type> resultCV = (JAXBElement<Cv24Type>) marshaller.unmarshal(new DOMSource(document));

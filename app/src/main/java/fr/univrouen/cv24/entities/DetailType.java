@@ -8,11 +8,14 @@
 
 package fr.univrouen.cv24.entities;
 
+import fr.univrouen.cv24.configuration.DateAdapter;
 import jakarta.persistence.*;
 import jakarta.xml.bind.annotation.*;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.sql.Date;
+import java.time.LocalDate;
 
 
 /**
@@ -49,43 +52,30 @@ public class DetailType {
     @GeneratedValue
     @XmlTransient
     private Long id;
-
-    @XmlElement(required = true)
-    @XmlSchemaType(name = "date")
-    @Transient
-    protected XMLGregorianCalendar datedeb;
-
-    @XmlSchemaType(name = "date")
-    @Transient
-    protected XMLGregorianCalendar datefin;
     @XmlElement(required = true)
     protected String titre;
 
+    @XmlSchemaType(name = "date")
+    @XmlElement(required = true)
+    @XmlJavaTypeAdapter(DateAdapter.class)
     @Column(name = "datedeb")
-    @Access(AccessType.PROPERTY)
-    public Date getDateSQLdeb() {
-        return new Date(datedeb.toGregorianCalendar().getTimeInMillis());
-    }
+    private LocalDate datedeb;
 
+    @XmlSchemaType(name = "date")
+    @XmlJavaTypeAdapter(DateAdapter.class)
     @Column(name = "datefin")
-    @Access(AccessType.PROPERTY)
-    public Date getDateSQLfin() {
-        return new Date(datefin.toGregorianCalendar().getTimeInMillis());
-    }
+    private LocalDate datefin;
 
-    public void setDateSQLdeb(Date value) {}
-
-    public void setDateSQLfin(Date value) {}
 
     /**
      * Gets the value of the datedeb property.
      *
      * @return
      *     possible object is
-     *     {@link XMLGregorianCalendar }
+     *     {@link LocalDate }
      *
      */
-    public XMLGregorianCalendar getDatedeb() {
+    public LocalDate getDatedeb() {
         return datedeb;
     }
 
@@ -94,10 +84,10 @@ public class DetailType {
      *
      * @param value
      *     allowed object is
-     *     {@link XMLGregorianCalendar }
+     *     {@link LocalDate }
      *
      */
-    public void setDatedeb(XMLGregorianCalendar value) {
+    public void setDatedeb(LocalDate value) {
         this.datedeb = value;
     }
 
@@ -106,10 +96,10 @@ public class DetailType {
      *
      * @return
      *     possible object is
-     *     {@link XMLGregorianCalendar }
+     *     {@link LocalDate }
      *
      */
-    public XMLGregorianCalendar getDatefin() {
+    public LocalDate getDatefin() {
         return datefin;
     }
 
@@ -118,10 +108,10 @@ public class DetailType {
      *
      * @param value
      *     allowed object is
-     *     {@link XMLGregorianCalendar }
+     *     {@link LocalDate }
      *
      */
-    public void setDatefin(XMLGregorianCalendar value) {
+    public void setDatefin(LocalDate value) {
         this.datefin = value;
     }
 

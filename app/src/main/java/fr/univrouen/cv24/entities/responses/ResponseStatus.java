@@ -4,5 +4,5 @@ public enum ResponseStatus {
     INSERTED,
     ERROR,
     DUPLICATED,
-    FOUND
+    NOT_FOUND, FOUND
 }

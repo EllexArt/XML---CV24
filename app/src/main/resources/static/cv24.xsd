@@ -38,8 +38,8 @@
 	
 	<xs:complexType name="detailType">
 		<xs:sequence>
-			<xs:element name="datedeb" type="xs:date"/>
-			<xs:element name="datefin" type="xs:date" minOccurs="0"/>
+			<xs:element name="datedeb" type="localDate"/>
+			<xs:element name="datefin" type="localDate" minOccurs="0"/>
 			<xs:element name="titre" type="string128"/>
 		</xs:sequence>
 	</xs:complexType>
@@ -53,7 +53,7 @@
 	
 	<xs:complexType name="diplomeType">
 		<xs:sequence>
-			<xs:element name="date" type="xs:date"/>
+			<xs:element name="date" type="localDate"/>
 			<xs:element name="institut" type="string32" minOccurs="0"/>
 			<xs:element name="titre" type="string32"/>
 		</xs:sequence>
@@ -62,10 +62,11 @@
 	
 	<xs:complexType name="certifType">
 		<xs:sequence>
-			<xs:element name="datedeb" type="xs:date"/>
-			<xs:element name="datefin" type="xs:date" minOccurs="0"/>
+			<xs:element name="datedeb" type="localDate"/>
+			<xs:element name="datefin" type="localDate" minOccurs="0"/>
 			<xs:element name="titre" type="string32"/>
 		</xs:sequence>
+
 	</xs:complexType>
 	
 	<xs:complexType name="diversType">
@@ -178,8 +179,12 @@
 			<xs:enumeration value="emploi"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
-	
+
+	<xs:simpleType name="localDate">
+		<xs:restriction base="xs:date">
+			<xs:pattern value="\d{4}-\d\d-\d\d"/>
+		</xs:restriction>
+	</xs:simpleType>
 	
 		
 </xs:schema>

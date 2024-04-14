@@ -8,6 +8,7 @@ import fr.univrouen.cv24.exceptions.InvalidXMLException;
 import fr.univrouen.cv24.repositories.CVRepository;
 import fr.univrouen.cv24.repositories.IdentiteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.stereotype.Service;
 import org.springframework.util.xml.SimpleNamespaceContext;
 import org.w3c.dom.Document;
@@ -42,6 +43,9 @@ public class CV24Service {
 
     @Autowired
     private CVRepository cvRepository;
+
+    @Autowired
+    private Jaxb2Marshaller marshaller;
 
 
     /**
@@ -119,15 +123,23 @@ public class CV24Service {
             throw new RuntimeException(e);
         }
 
-        System.out.println("test");
-        System.out.println(cv.getDocumentElement().getChildNodes().toString());
-
         Optional<IdentiteType> duplicatedIdentity =
                 identityRepository.findByNomAndPrenomAndGenreAndTel(
                         name, firstName, GenreType.fromValue(gender), phone
                 );
 
         return duplicatedIdentity.isPresent();
+    }
+
+    /**
+     * transformCVToXML : transform a Cv24Type into an XML string
+     * @param cv Cv24Type
+     * @return String
+     */
+    public String transformCVToXML(Cv24Type cv) {
+        StringWriter writer = new StringWriter();
+        marshaller.marshal(cv, new StreamResult(writer));
+        return writer.toString();
     }
 
     /**
@@ -146,7 +158,7 @@ public class CV24Service {
         Transformer transformer;
         Source xslt = new StreamSource("src/main/resources/templates/cv.xslt");
         assert !xslt.isEmpty();
-        Source xml = new StreamSource(new StringReader(cv.toString()));
+        Source xml = new StreamSource(new StringReader(transformCVToXML(cv)));
         assert !xml.isEmpty();
         try {
             transformer = transformerFactory.newTransformer(xslt);

@@ -1,6 +1,5 @@
 package fr.univrouen.cv24.configuration;
 
-import fr.univrouen.cv24.entities.Cv24Type;
 import fr.univrouen.cv24.entities.ObjectFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

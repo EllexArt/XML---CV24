@@ -35,6 +35,7 @@ import jakarta.xml.bind.annotation.*;
  * 
  * 
  */
+@XmlRootElement(name = "cv24")
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "cv24Type", propOrder = {
 

@@ -8,11 +8,12 @@
 
 package fr.univrouen.cv24.entities;
 
+import fr.univrouen.cv24.configuration.DateAdapter;
 import jakarta.persistence.*;
 import jakarta.xml.bind.annotation.*;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import javax.xml.datatype.XMLGregorianCalendar;
-import java.sql.Date;
+import java.time.LocalDate;
 
 
 /**
@@ -51,10 +52,11 @@ public class DiplomeType {
     @XmlTransient
     private Long id;
 
-    @XmlElement(required = true)
     @XmlSchemaType(name = "date")
-    @Transient
-    protected XMLGregorianCalendar date;
+    @XmlElement(required = true)
+    @XmlJavaTypeAdapter(DateAdapter.class)
+    @Column(name = "date")
+    protected LocalDate date;
 
     protected String institut;
 
@@ -64,22 +66,16 @@ public class DiplomeType {
     @XmlAttribute(name = "niveau", required = true)
     protected int niveau;
 
-    @Column(name = "date")
-    @Access(AccessType.PROPERTY)
-    public Date getDateSQL() {
-        return new Date(date.toGregorianCalendar().getTimeInMillis());
-    }
 
-    public void setDateSQL(Date date) {}
     /**
      * Gets the value of the date property.
      *
      * @return
      *     possible object is
-     *     {@link XMLGregorianCalendar }
+     *     {@link LocalDate }
      *
      */
-    public XMLGregorianCalendar getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
@@ -88,10 +84,10 @@ public class DiplomeType {
      *
      * @param value
      *     allowed object is
-     *     {@link XMLGregorianCalendar }
+     *     {@link LocalDate }
      *
      */
-    public void setDate(XMLGregorianCalendar value) {
+    public void setDate(LocalDate value) {
         this.date = value;
     }
 

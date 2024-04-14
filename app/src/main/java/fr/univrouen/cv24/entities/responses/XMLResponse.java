@@ -6,18 +6,18 @@ import jakarta.xml.bind.annotation.XmlElement;
 public class XMLResponse extends Response {
 
     @XmlElement
-    Cv24Type cv;
+    String cv;
 
-    public XMLResponse(Cv24Type cv, ResponseStatus status) {
+    public XMLResponse(String cv, ResponseStatus status) {
         super(status);
         this.cv = cv;
     }
 
-    public Cv24Type getCv() {
+    public String getCv() {
         return cv;
     }
 
-    public void setCv(Cv24Type cv) {
+    public void setCv(String cv) {
         this.cv = cv;
     }
 
