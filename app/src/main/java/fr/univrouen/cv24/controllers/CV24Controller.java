@@ -11,8 +11,10 @@ import fr.univrouen.cv24.exceptions.InvalidResourceException;
 import fr.univrouen.cv24.exceptions.InvalidXMLException;
 import fr.univrouen.cv24.repositories.CVRepository;
 import fr.univrouen.cv24.services.CV24Service;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.servers.Server;
 import jakarta.xml.bind.JAXBElement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,6 +30,7 @@ import java.io.ByteArrayInputStream;
 import java.util.Optional;
 
 @RestController
+@OpenAPIDefinition(servers = {@Server(url = "/", description = "Default Server URL")})
 class CV24Controller {
 
     private final CV24Service cv24Service;
