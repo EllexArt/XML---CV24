@@ -149,7 +149,7 @@ class CV24Controller {
         produces = MediaType.APPLICATION_XML_VALUE
     )
     @Operation(summary = "Delete a CV", responses = {
-            @ApiResponse(responseCode = "204", description = "CV deleted"),
+            @ApiResponse(responseCode = "200", description = "CV deleted"),
             @ApiResponse(responseCode = "404", description = "CV not found")
     })
     public ResponseEntity<CVResponse> deleteCV(@RequestBody Long id) throws CVNotFoundException {
