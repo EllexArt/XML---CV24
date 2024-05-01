@@ -145,13 +145,14 @@ class CV24Controller {
 
 
     @DeleteMapping(value = "/cv24/delete",
+        consumes = MediaType.APPLICATION_JSON_VALUE,
         produces = MediaType.APPLICATION_XML_VALUE
     )
     @Operation(summary = "Delete a CV", responses = {
             @ApiResponse(responseCode = "204", description = "CV deleted"),
             @ApiResponse(responseCode = "404", description = "CV not found")
     })
-    public ResponseEntity<CVResponse> deleteCV(@RequestBody long id) throws CVNotFoundException {
+    public ResponseEntity<CVResponse> deleteCV(@RequestBody Long id) throws CVNotFoundException {
         Optional<Cv24Type> optional = cvRepository.findById(id);
 
         if (optional.isEmpty()) {
@@ -159,7 +160,7 @@ class CV24Controller {
         }
 
         cvRepository.delete(optional.get());
-        return new ResponseEntity<>(new CVResponse(id, CVResponseStatus.DELETED), HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(new CVResponse(id, CVResponseStatus.DELETED), HttpStatus.OK);
     }
 
 }
