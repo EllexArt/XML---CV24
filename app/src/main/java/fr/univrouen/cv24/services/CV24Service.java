@@ -76,9 +76,8 @@ public class CV24Service {
      * @param cv the file to parse
      * @return true if valid CV
      * @throws InvalidResourceException if the xsd can't be loaded
-     * @throws InvalidXMLException if the file can't be parsed
      */
-    public boolean isValidCV(Document cv) throws InvalidResourceException, InvalidXMLException {
+    public boolean isValidCV(Document cv) throws InvalidResourceException {
         SimpleErrorHandler simpleErrorHandler = new SimpleErrorHandler();
         Schema schema;
         URL xsd = getClass().getClassLoader().getResource("static/cv24.xsd");
@@ -94,7 +93,7 @@ public class CV24Service {
         try {
             validator.validate(new DOMSource(cv));
         } catch (SAXException | IOException e) {
-            throw new InvalidXMLException("Impossible to validate the xml");
+            return false;
         }
         return !simpleErrorHandler.errorOccurred;
     }
