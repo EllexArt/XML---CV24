@@ -6,18 +6,18 @@ import jakarta.xml.bind.annotation.XmlElement;
 public class CVResponse extends Response {
 
     @XmlElement
-    private long cvId;
+    private long id;
 
-    public CVResponse(long cvId, CVResponseStatus status) {
+    public CVResponse(long id, CVResponseStatus status) {
         super(status);
-        this.cvId = cvId;
+        this.id = id;
     }
 
-    public long getCvId() {
-        return cvId;
+    public long getId() {
+        return id;
     }
 
-    public void setCvId(int cvId) {
-        this.cvId = cvId;
+    public void setId(int cvId) {
+        this.id = cvId;
     }
 }

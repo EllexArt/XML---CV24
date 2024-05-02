@@ -2,6 +2,7 @@ package fr.univrouen.cv24.exceptions;
 
 import fr.univrouen.cv24.entities.responses.CVResponseStatus;
 import fr.univrouen.cv24.entities.responses.ErrorResponse;
+import fr.univrouen.cv24.entities.responses.NotFoundResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -45,10 +46,11 @@ public class CV24ControllerExceptionHandler {
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(CVNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleCVNotFoundException() {
+    public ResponseEntity<ErrorResponse> handleCVNotFoundException(CVNotFoundException e) {
         return new ResponseEntity<>(
-                new ErrorResponse("CV not found",
-                        CVResponseStatus.NOT_FOUND),
+                new NotFoundResponse("CV not found",
+                        e.getId()
+                ),
                 HttpStatus.NOT_FOUND
         );
     }

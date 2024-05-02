@@ -86,7 +86,7 @@ class CV24Controller {
         Optional<Cv24Type> optional = cvRepository.findById(id);
 
         if (optional.isEmpty()) {
-            throw new CVNotFoundException();
+            throw new CVNotFoundException(id);
         }
 
         Cv24Type cv = optional.get();
@@ -105,7 +105,7 @@ class CV24Controller {
         Optional<Cv24Type> optional = cvRepository.findById(id);
 
         if (optional.isEmpty()) {
-            return new ResponseEntity<>("<p>" + id + "</p><p>" + CVResponseStatus.ERROR + "</p>", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("<p>" + id + "</p><p>" + CVResponseStatus.NOT_FOUND + "</p>", HttpStatus.NOT_FOUND);
         }
 
         Cv24Type cv = optional.get();
@@ -159,7 +159,7 @@ class CV24Controller {
         Optional<Cv24Type> optional = cvRepository.findById(id);
 
         if (optional.isEmpty()) {
-            throw new CVNotFoundException();
+            throw new CVNotFoundException(id);
         }
 
         cvRepository.delete(optional.get());

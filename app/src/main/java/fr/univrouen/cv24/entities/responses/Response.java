@@ -3,7 +3,7 @@ package fr.univrouen.cv24.entities.responses;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement
+@XmlRootElement(name = "response")
 public abstract class Response {
     @XmlElement
     private CVResponseStatus status;
