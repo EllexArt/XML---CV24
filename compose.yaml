@@ -3,18 +3,15 @@ services:
   springboot:
     build:
       context: app
-      dockerfile: Dockerfile
+      dockerfile: $DOCKERFILE
     depends_on:
       - postgres
     ports:
       - $SPRING_LOCAL_PORT:$SPRING_DOCKER_PORT
     environment:
-      POSTGRES_USER: $POSTGRES_USER
-      POSTGRES_PASSWORD: $POSTGRES_PASSWORD
-      SPRING_DATASOURCE_URL: jdbc:postgresql://database_cv24:5432/$POSTGRES_DB
-      SPRING_DATASOURCE_USERNAME: $POSTGRES_USER
-      SPRING_DATASOURCE_PASSWORD: $POSTGRES_PASSWORD
-      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      POSTGRES_DOCKER_USER: $POSTGRES_USER
+      POSTGRES_DOCKER_PASSWORD: $POSTGRES_PASSWORD
+      POSTGRES_DOCKER_URL: jdbc:postgresql://database_cv24:5432/$POSTGRES_DB
     volumes:
       - .m2:/root/.m2
       - ./app:/app
