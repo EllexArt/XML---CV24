@@ -1,0 +1,240 @@
+{
+	"info": {
+		"_postman_id": "5300d5d6-557f-4530-828c-81935c481eb1",
+		"name": "cv24_binginot_mazuy",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "33746628"
+	},
+	"item": [
+		{
+			"name": "Home page",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{IP_SERVER}}:8080/",
+					"protocol": "http",
+					"host": [
+						"{{IP_SERVER}}"
+					],
+					"port": "8080",
+					"path": [
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Insert valid CV",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "<cv24:cv24 xmlns:cv24=\"http://univ.fr/cv24\">\r\n  <cv24:identite>\r\n    <cv24:genre>Mrs</cv24:genre>\r\n    <cv24:nom>STRING</cv24:nom>\r\n    <cv24:prenom>string</cv24:prenom>\r\n    <!--Optional:-->\r\n    <cv24:tel>+33 0 00 00 00 00</cv24:tel>\r\n    <!--Optional:-->\r\n    <cv24:mel>string@string.com</cv24:mel>\r\n  </cv24:identite>\r\n  <cv24:objectif statut=\"stage\">string</cv24:objectif>\r\n  <!--Optional:-->\r\n  <cv24:prof>\r\n    <!--1 or more repetitions:-->\r\n    <cv24:detail>\r\n      <cv24:datedeb>2012-01-19</cv24:datedeb>\r\n      <!--Optional:-->\r\n      <cv24:datefin>2000-07-27</cv24:datefin>\r\n      <cv24:titre>string</cv24:titre>\r\n    </cv24:detail>\r\n  </cv24:prof>\r\n  <cv24:competences>\r\n    <!--1 to 5 repetitions:-->\r\n    <cv24:diplome niveau=\"3\">\r\n      <cv24:date>2005-07-15</cv24:date>\r\n      <!--Optional:-->\r\n      <cv24:institut>string</cv24:institut>\r\n      <cv24:titre>Diplome d'ingénieur</cv24:titre>\r\n    </cv24:diplome>\r\n    <!--Zero or more repetitions:-->\r\n    <cv24:certif>\r\n      <cv24:datedeb>2011-12-28</cv24:datedeb>\r\n      <!--Optional:-->\r\n      <cv24:datefin>2003-07-03</cv24:datefin>\r\n      <cv24:titre>string</cv24:titre>\r\n    </cv24:certif>\r\n  </cv24:competences>\r\n  <!--Optional:-->\r\n  <cv24:divers>\r\n    <!--1 to 5 repetitions:-->\r\n    <cv24:lv lang=\"string\" cert=\"TOEIC\" nivi=\"990\"/>\r\n    <!--0 to 3 repetitions:-->\r\n    <cv24:autre titre=\"string\" comment=\"string\"/>\r\n  </cv24:divers>\r\n</cv24:cv24>",
+					"options": {
+						"raw": {
+							"language": "xml"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{IP_SERVER}}:8080/cv24/insert",
+					"protocol": "http",
+					"host": [
+						"{{IP_SERVER}}"
+					],
+					"port": "8080",
+					"path": [
+						"cv24",
+						"insert"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Insert invalid CV",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "<cv24:cv24 xmlns:cv24=\"http://univ.fr/cv24\">\r\n  <cv24:identite>\r\n    <cv24:genre>Mrs</cv24:genre>\r\n    <cv24:nom>minuscule</cv24:nom>\r\n    <cv24:prenom>string</cv24:prenom>\r\n    <!--Optional:-->\r\n    <cv24:tel>+33 0 00 00 00 00</cv24:tel>\r\n    <!--Optional:-->\r\n    <cv24:mel>string@string.com</cv24:mel>\r\n  </cv24:identite>\r\n  <cv24:objectif statut=\"stage\">string</cv24:objectif>\r\n  <!--Optional:-->\r\n  <cv24:prof>\r\n    <!--1 or more repetitions:-->\r\n    <cv24:detail>\r\n      <cv24:datedeb>2012-01-19</cv24:datedeb>\r\n      <!--Optional:-->\r\n      <cv24:datefin>2000-07-27</cv24:datefin>\r\n      <cv24:titre>string</cv24:titre>\r\n    </cv24:detail>\r\n  </cv24:prof>\r\n  <cv24:competences>\r\n    <!--1 to 5 repetitions:-->\r\n    <cv24:diplome niveau=\"3\">\r\n      <cv24:date>2005-07-15</cv24:date>\r\n      <!--Optional:-->\r\n      <cv24:institut>string</cv24:institut>\r\n      <cv24:titre>Diplome d'ingénieur</cv24:titre>\r\n    </cv24:diplome>\r\n    <!--Zero or more repetitions:-->\r\n    <cv24:certif>\r\n      <cv24:datedeb>2011-12-28</cv24:datedeb>\r\n      <!--Optional:-->\r\n      <cv24:datefin>2003-07-03</cv24:datefin>\r\n      <cv24:titre>string</cv24:titre>\r\n    </cv24:certif>\r\n  </cv24:competences>\r\n  <!--Optional:-->\r\n  <cv24:divers>\r\n    <!--1 to 5 repetitions:-->\r\n    <cv24:lv lang=\"string\" cert=\"TOEIC\" nivi=\"990\"/>\r\n    <!--0 to 3 repetitions:-->\r\n    <cv24:autre titre=\"string\" comment=\"string\"/>\r\n  </cv24:divers>\r\n</cv24:cv24>",
+					"options": {
+						"raw": {
+							"language": "xml"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{IP_SERVER}}:8080/cv24/insert",
+					"protocol": "http",
+					"host": [
+						"{{IP_SERVER}}"
+					],
+					"port": "8080",
+					"path": [
+						"cv24",
+						"insert"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get XML by id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{IP_SERVER}}:8080/cv24/xml?id=102",
+					"protocol": "http",
+					"host": [
+						"{{IP_SERVER}}"
+					],
+					"port": "8080",
+					"path": [
+						"cv24",
+						"xml"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "102",
+							"description": "The id of the XML CV"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get HTML by id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{IP_SERVER}}:8080/cv24/html?id=102",
+					"protocol": "http",
+					"host": [
+						"{{IP_SERVER}}"
+					],
+					"port": "8080",
+					"path": [
+						"cv24",
+						"html"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "102",
+							"description": "The id of the HTML CV"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get HTML CV resume",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{IP_SERVER}}:8080/cv24/resume",
+					"protocol": "http",
+					"host": [
+						"{{IP_SERVER}}"
+					],
+					"port": "8080",
+					"path": [
+						"cv24",
+						"resume"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get XML CV resume",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{IP_SERVER}}:8080/cv24/resume/xml",
+					"protocol": "http",
+					"host": [
+						"{{IP_SERVER}}"
+					],
+					"port": "8080",
+					"path": [
+						"cv24",
+						"resume",
+						"xml"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete a CV by id",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "102",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{IP_SERVER}}:8080/cv24/delete",
+					"protocol": "http",
+					"host": [
+						"{{IP_SERVER}}"
+					],
+					"port": "8080",
+					"path": [
+						"cv24",
+						"delete"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "IP_SERVER",
+			"value": "localhost",
+			"type": "string"
+		}
+	]
+}
