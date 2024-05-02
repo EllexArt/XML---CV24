@@ -9,9 +9,10 @@ services:
     ports:
       - $SPRING_LOCAL_PORT:$SPRING_DOCKER_PORT
     environment:
-      POSTGRES_DOCKER_USER: $POSTGRES_USER
-      POSTGRES_DOCKER_PASSWORD: $POSTGRES_PASSWORD
-      POSTGRES_DOCKER_URL: jdbc:postgresql://database_cv24:5432/$POSTGRES_DB
+      POSTGRES_USER: $POSTGRES_USER
+      POSTGRES_PASSWORD: $POSTGRES_PASSWORD
+      POSTGRES_URL: jdbc:postgresql://database_cv24:5432/$POSTGRES_DB
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
     volumes:
       - .m2:/root/.m2
       - ./app:/app

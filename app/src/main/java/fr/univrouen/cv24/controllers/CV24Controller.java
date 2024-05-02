@@ -3,8 +3,6 @@ package fr.univrouen.cv24.controllers;
 import fr.univrouen.cv24.entities.Cv24Type;
 import fr.univrouen.cv24.entities.responses.CVResponse;
 import fr.univrouen.cv24.entities.responses.CVResponseStatus;
-import fr.univrouen.cv24.entities.responses.Response;
-import fr.univrouen.cv24.entities.resume.CVList;
 import fr.univrouen.cv24.exceptions.CVAlreadyInDatabaseException;
 import fr.univrouen.cv24.exceptions.CVNotFoundException;
 import fr.univrouen.cv24.exceptions.InvalidResourceException;
@@ -21,9 +19,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.w3c.dom.Document;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.xml.transform.dom.DOMSource;
 import java.io.ByteArrayInputStream;
@@ -35,13 +36,14 @@ class CV24Controller {
 
     private final CV24Service cv24Service;
 
+    Logger logger = LoggerFactory.getLogger(this.getClass());
+
     @Autowired
     private Jaxb2Marshaller marshaller;
 
     private final CVRepository cvRepository;
 
     public CV24Controller(final CV24Service cv24Service, final CVRepository cvRepository) {
-
         this.cv24Service = cv24Service;
         this.cvRepository = cvRepository;
     }
@@ -99,11 +101,11 @@ class CV24Controller {
             @ApiResponse(responseCode = "200", description = "Found CV"),
             @ApiResponse(responseCode = "404", description = "Invalid id, no CV found")
     })
-    public ResponseEntity<String> findHTMLCVById(@RequestParam long id) {
+    public ResponseEntity<String> findHTMLCVById(@RequestParam long id, Model model) {
         Optional<Cv24Type> optional = cvRepository.findById(id);
 
         if (optional.isEmpty()) {
-            return new ResponseEntity<>("CV not found", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("<p>" + id + "</p><p>" + CVResponseStatus.ERROR + "</p>", HttpStatus.NOT_FOUND);
         }
 
         Cv24Type cv = optional.get();
@@ -128,7 +130,6 @@ class CV24Controller {
         if (!cv24Service.isValidCV(document)) {
             throw new InvalidXMLException("Invalid XML format");
         }
-
         if (cv24Service.isAlreadyInDatabase(document)) {
             throw new CVAlreadyInDatabaseException("There is already a CV with the same identity");
         }
@@ -136,6 +137,8 @@ class CV24Controller {
         JAXBElement<Cv24Type> resultCV = (JAXBElement<Cv24Type>) marshaller.unmarshal(new DOMSource(document));
 
         Cv24Type cvInserted =  cv24Service.saveCV(resultCV.getValue());
+
+        logger.info("New CV inserted");
 
         return new ResponseEntity<>(
                 new CVResponse(cvInserted.getId(), CVResponseStatus.INSERTED),
@@ -160,6 +163,9 @@ class CV24Controller {
         }
 
         cvRepository.delete(optional.get());
+
+        logger.info("CV deleted");
+
         return new ResponseEntity<>(new CVResponse(id, CVResponseStatus.DELETED), HttpStatus.OK);
     }
 

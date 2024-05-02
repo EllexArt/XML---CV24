@@ -57,7 +57,7 @@ public class CV24Service {
      * getXMLDocumentFromInputStream: parse the inputstream in entry and return it
      * @param cv the file to parse
      * @return the document
-     * @throws InvalidXMLException if the xsd can't be loaded
+     * @throws InvalidXMLException if the file can't be parsed
      */
     public Document getXMLCVDocumentFromInputStream(InputStream cv) throws InvalidXMLException {
         try {
