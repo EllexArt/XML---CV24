@@ -2,7 +2,7 @@
 	"info": {
 		"_postman_id": "5300d5d6-557f-4530-828c-81935c481eb1",
 		"name": "cv24_binginot_mazuy",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
 		"_exporter_id": "33746628"
 	},
 	"item": [
@@ -11,17 +11,7 @@
 			"request": {
 				"method": "GET",
 				"header": [],
-				"url": {
-					"raw": "http://{{IP_SERVER}}:8080/",
-					"protocol": "http",
-					"host": [
-						"{{IP_SERVER}}"
-					],
-					"port": "8080",
-					"path": [
-						""
-					]
-				}
+				"url": "http://{{IP_SERVER}}:8080/"
 			},
 			"response": []
 		},
@@ -39,18 +29,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "http://{{IP_SERVER}}:8080/cv24/insert",
-					"protocol": "http",
-					"host": [
-						"{{IP_SERVER}}"
-					],
-					"port": "8080",
-					"path": [
-						"cv24",
-						"insert"
-					]
-				}
+				"url": "http://{{IP_SERVER}}:8080/cv24/insert"
 			},
 			"response": []
 		},
@@ -68,18 +47,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "http://{{IP_SERVER}}:8080/cv24/insert",
-					"protocol": "http",
-					"host": [
-						"{{IP_SERVER}}"
-					],
-					"port": "8080",
-					"path": [
-						"cv24",
-						"insert"
-					]
-				}
+				"url": "http://{{IP_SERVER}}:8080/cv24/insert"
 			},
 			"response": []
 		},
@@ -142,18 +110,7 @@
 			"request": {
 				"method": "GET",
 				"header": [],
-				"url": {
-					"raw": "http://{{IP_SERVER}}:8080/cv24/resume",
-					"protocol": "http",
-					"host": [
-						"{{IP_SERVER}}"
-					],
-					"port": "8080",
-					"path": [
-						"cv24",
-						"resume"
-					]
-				}
+				"url": "http://{{IP_SERVER}}:8080/cv24/resume"
 			},
 			"response": []
 		},
@@ -162,19 +119,7 @@
 			"request": {
 				"method": "GET",
 				"header": [],
-				"url": {
-					"raw": "http://{{IP_SERVER}}:8080/cv24/resume/xml",
-					"protocol": "http",
-					"host": [
-						"{{IP_SERVER}}"
-					],
-					"port": "8080",
-					"path": [
-						"cv24",
-						"resume",
-						"xml"
-					]
-				}
+				"url": "http://{{IP_SERVER}}:8080/cv24/resume/xml"
 			},
 			"response": []
 		},
@@ -183,17 +128,8 @@
 			"request": {
 				"method": "DELETE",
 				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "102",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
 				"url": {
-					"raw": "http://{{IP_SERVER}}:8080/cv24/delete",
+					"raw": "http://{{IP_SERVER}}:8080/cv24/delete?id=1",
 					"protocol": "http",
 					"host": [
 						"{{IP_SERVER}}"
@@ -202,6 +138,13 @@
 					"path": [
 						"cv24",
 						"delete"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "1",
+							"description": "The id of the CV to delete"
+						}
 					]
 				}
 			},
