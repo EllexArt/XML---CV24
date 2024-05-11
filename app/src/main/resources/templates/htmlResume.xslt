@@ -8,6 +8,7 @@
         <xsl:element name="html">
             <xsl:element name="head">
                 <xsl:element name="title">CV24 Resume</xsl:element>
+                <link href="/stylesheets/resume.css" rel="stylesheet"/>
             </xsl:element>
             <xsl:element name="body">
                 <xsl:element name="h1">CV24 - Resume</xsl:element>

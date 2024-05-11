@@ -9,6 +9,7 @@
         <xsl:element name="html">
             <xsl:element name="head">
                 <xsl:element name="title">CV24</xsl:element>
+                <link href="/stylesheets/cv.css" rel="stylesheet"/>
             </xsl:element>
             <xsl:element name="body">
                 <xsl:element name="h1">CV24 - XSLT V1.0</xsl:element>
